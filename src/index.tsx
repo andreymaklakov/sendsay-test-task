@@ -3,9 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./app/App";
 import { Provider } from "react-redux";
-import createStore from "./app/store/createStore";
-
-const store = createStore();
+import store from "./app/store/createStore";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

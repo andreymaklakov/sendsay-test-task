@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { mathSigns } from "../../constants";
 import { chooseSign, getActive } from "../../store/calculator";
+import { AppDispatch } from "../../store/createStore";
 
 import styles from "./MathSigns.module.scss";
 
 const MathSigns: React.FC = () => {
   const active: string = useSelector(getActive());
 
-  const dispatch: Function = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const handleChooseSign = (sign: string) => {
     dispatch(chooseSign(sign));

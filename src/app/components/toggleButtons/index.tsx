@@ -10,11 +10,12 @@ import {
 import styles from "./ToggleButtons.module.scss";
 
 import { getActive, toggleCalcOrConstructor } from "../../store/calculator";
+import { AppDispatch } from "../../store/createStore";
 
 const ToggleButtons: React.FC = () => {
   const active: string = useSelector(getActive());
 
-  const dispatch: Function = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const onChangeActive = (btn: string) => {
     dispatch(toggleCalcOrConstructor(btn));

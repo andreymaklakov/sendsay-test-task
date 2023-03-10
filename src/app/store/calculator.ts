@@ -1,17 +1,7 @@
+import { AppDispatch, AppThunk, RootState } from "./createStore";
 import { createSlice } from "@reduxjs/toolkit";
+
 import { mathSigns } from "../constants";
-
-interface Calculator {
-  active: string;
-  screenNums: string;
-  sign: string;
-  calculation: string;
-  result: string;
-}
-
-interface State {
-  calculator: Calculator;
-}
 
 const calculatorSlice = createSlice({
   name: "calculator",
@@ -38,12 +28,12 @@ const calculatorSlice = createSlice({
     },
     calculationAdded(state, action) {
       const payload = action.payload === "*" ? "x" : action.payload;
-      let payloadIsSing = !!mathSigns.find((sign) => sign === payload);
+      const payloadIsSing = !!mathSigns.find((sign) => sign === payload);
 
       let lastSymbol = state.calculation[state.calculation.length - 1];
       lastSymbol = lastSymbol === "*" ? "x" : lastSymbol;
 
-      let lastSymbolIsSign = !!mathSigns.find((sign) => sign === lastSymbol);
+      const lastSymbolIsSign = !!mathSigns.find((sign) => sign === lastSymbol);
 
       if (
         state.calculation === "0" &&
@@ -81,8 +71,6 @@ const calculatorSlice = createSlice({
           state.calculation = state.calculation + action.payload;
         }
       }
-
-      console.log(state.calculation);
     },
     clearCalculation(state) {
       state.calculation = "0";
@@ -120,8 +108,8 @@ const {
 } = actions;
 
 export const toggleCalcOrConstructor =
-  (btn: string) =>
-  (dispatch: Function, getState: Function): void => {
+  (btn: string): AppThunk =>
+  (dispatch, getState): void => {
     dispatch(activeChanged(btn));
 
     if (getActive()(getState()) !== "0") {
@@ -131,8 +119,8 @@ export const toggleCalcOrConstructor =
   };
 
 export const addToScreenNums =
-  (num: string) =>
-  (dispatch: Function, getState: Function): void => {
+  (num: string): AppThunk =>
+  (dispatch, getState): void => {
     let lastSymbol = getCalculation()(getState())[
       getCalculation()(getState()).length - 1
     ];
@@ -154,15 +142,15 @@ export const addToScreenNums =
 
 export const chooseSign =
   (sign: string) =>
-  (dispatch: Function): void => {
+  (dispatch: AppDispatch): void => {
     sign = sign === "x" ? "*" : sign;
 
     dispatch(calculationAdded(sign));
   };
 
 export const calculateResult =
-  () =>
-  (dispatch: Function, getState: Function): void => {
+  (): AppThunk =>
+  (dispatch, getState): void => {
     let lastSymbol = getCalculation()(getState())[
       getCalculation()(getState()).length - 1
     ];
@@ -175,10 +163,10 @@ export const calculateResult =
     }
   };
 
-export const getActive = () => (state: State) => state.calculator.active;
-export const getCalculation = () => (state: State) =>
+export const getActive = () => (state: RootState) => state.calculator.active;
+export const getCalculation = () => (state: RootState) =>
   state.calculator.calculation;
-export const getScreenNums = () => (state: State) =>
+export const getScreenNums = () => (state: RootState) =>
   state.calculator.screenNums;
 
 export default calculatorReducer;

@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToScreenNums, getActive } from "../../store/calculator";
+import { AppDispatch } from "../../store/createStore";
 
 import styles from "./Numbers.module.scss";
 
@@ -21,7 +22,7 @@ const numbers: string[] = [
 const Numbers: React.FC = () => {
   const active: string = useSelector(getActive());
 
-  const dispatch: Function = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const saveNums = (num: string) => {
     dispatch(addToScreenNums(num));

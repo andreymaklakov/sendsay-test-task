@@ -1,15 +1,27 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import {
+  Action,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+} from "@reduxjs/toolkit";
 import calculatorReducer from "./calculator";
 
 const rootReducer = combineReducers({
   calculator: calculatorReducer,
 });
 
-function createStore() {
-  return configureStore({
-    reducer: rootReducer,
-    devTools: process.env.NODE_ENV !== "production",
-  });
-}
+const store = configureStore({
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== "production",
+});
 
-export default createStore;
+export default store;
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;

@@ -18,7 +18,7 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
 
   const active: string = useSelector(getActive());
 
-  const boardRef = useRef<HTMLDivElement | any>();
+  const boardRef = useRef<undefined | HTMLDivElement>();
 
   const makeItemUndraggabe = (boardTitle: string): void => {
     setContent(
@@ -50,11 +50,7 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
     );
   };
 
-  const handleDragOver = (
-    e: React.DragEvent,
-    board: DataObject,
-    item?: Item
-  ) => {
+  const handleDragOver = (e: React.DragEvent, board: DataObject) => {
     e.preventDefault();
 
     if (board.title === "right") {
@@ -69,11 +65,7 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
     }
   };
 
-  const handleDragStart = (
-    e: React.DragEvent,
-    board: DataObject,
-    item: Item
-  ) => {
+  const handleDragStart = (board: DataObject, item: Item) => {
     setCurrentBorder(board);
     setCurrentItem(item);
   };
@@ -82,48 +74,49 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
     e.preventDefault();
 
     if (board.title === "right") {
-      const currentItemIndex: number = currentBoard?.items.indexOf(
-        currentItem!
-      )!;
-
-      if (currentBoard?.title === "right") {
-        currentBoard?.items.splice(currentItemIndex, 1);
-      }
-
-      if (item) {
-        const dropItemIndex =
-          currentItem?.id === 1
-            ? 0
-            : item.id === 1
-            ? 1
-            : board.items.indexOf(item);
-
-        board.items.splice(dropItemIndex, 0, currentItem!);
+      if (currentItem && currentBoard) {
+        const currentItemIndex: number | false =
+          currentBoard?.items.indexOf(currentItem);
 
         if (currentBoard?.title === "right") {
-          board.items.splice(dropItemIndex, 0, currentItem!);
+          currentBoard?.items.splice(currentItemIndex, 1);
         }
-      }
 
-      setContent(
-        content.map((b) => {
-          if (b.title === board.title) {
-            return board;
+        if (item) {
+          const dropItemIndex =
+            currentItem?.id === 1
+              ? 0
+              : item.id === 1
+              ? 1
+              : board.items.indexOf(item);
+
+          board.items.splice(dropItemIndex, 0, currentItem);
+
+          if (currentBoard?.title === "right") {
+            board.items.splice(dropItemIndex, 0, currentItem);
           }
-          if (b.title === currentBoard?.title) {
-            return currentBoard;
-          }
+        }
 
-          return b;
-        })
-      );
+        setContent(
+          content.map((b) => {
+            if (b.title === board.title) {
+              return board;
+            }
+            if (b.title === currentBoard?.title) {
+              return currentBoard;
+            }
 
-      //makes dragged items undraggable on left board
-      makeItemUndraggabe("left");
+            return b;
+          })
+        );
 
-      //makes screen item undraggable on right board
-      if (currentItem?.id === 1) {
-        makeItemUndraggabe("right");
+        //makes dragged items undraggable on left board
+        makeItemUndraggabe("left");
+
+        //makes screen item undraggable on right board
+        if (currentItem.id === 1) {
+          makeItemUndraggabe("right");
+        }
       }
     }
   };
@@ -135,10 +128,12 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
           e.target.classList.contains(styles.draggableItemsContainer) ||
           !board.items.length
         ) {
-          if (currentItem?.id !== 1) {
-            board.items.push(currentItem!);
-          } else if (currentItem?.id === 1) {
-            board.items.unshift(currentItem!);
+          if (currentItem) {
+            if (currentItem?.id !== 1) {
+              board.items.push(currentItem);
+            } else if (currentItem?.id === 1) {
+              board.items.unshift(currentItem);
+            }
           }
 
           e.target.style.border = "none";
@@ -164,7 +159,11 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
     }
   };
 
-  const handleDeleteItem = (e: any, board: DataObject, item: Item) => {
+  const handleDeleteItem = (
+    e: React.MouseEvent<HTMLElement>,
+    board: DataObject,
+    item: Item
+  ) => {
     const filteredItems = content[1].items.filter((it) => it.id !== item.id);
     content[1].items = filteredItems;
 
@@ -172,7 +171,7 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
 
     if (board.title === "right") {
       if (e.target instanceof HTMLElement) {
-        if (!board.items.length) {
+        if (!board.items.length && boardRef.current) {
           boardRef.current.style.border = "2px dashed #c4c4c4";
 
           boardRef.current.style.justifyContent = "center";
@@ -209,7 +208,7 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
           onDragOver={(e) => handleDragOver(e, board)}
           onDrop={(e) => handleDropOnEmptyBoard(e, board)}
           onDragLeave={(e) => handleDragLeave(e, board)}
-          ref={boardRef}
+          ref={boardRef as React.RefObject<HTMLDivElement>}
           key={boardInd}
           className={`${styles.draggableItemsContainer} ${getBoardStyles(
             board
@@ -222,8 +221,8 @@ const ColumnsWrapper: React.FC<Props> = ({ data }) => {
           {board.items.map((item: Item) => (
             <div
               draggable={active === "constructor" ? item.draggable : false}
-              onDragOver={(e) => handleDragOver(e, board, item)}
-              onDragStart={(e) => handleDragStart(e, board, item)}
+              onDragOver={(e) => handleDragOver(e, board)}
+              onDragStart={() => handleDragStart(board, item)}
               onDrop={(e) => handleDrop(e, board, item)}
               onDoubleClick={
                 board.title === "right"
