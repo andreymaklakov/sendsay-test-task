@@ -1,0 +1,52 @@
+.buttons_container {
+  width: 243px;
+  height: 38px;
+
+  background: #f3f4f6;
+  border-radius: 6px;
+
+  margin-bottom: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  button {
+    height: 36px;
+
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 15px;
+
+    color: #4d5562;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    cursor: pointer;
+  }
+
+  .button_active {
+    svg {
+      color: #5d5fef;
+    }
+
+    background: #ffffff;
+    border: 1px solid #e2e3e5;
+    border-radius: 5px;
+  }
+
+  .button_run {
+    width: 108px;
+    padding: 12px;
+  }
+  .button_constr {
+    width: 133px;
+    padding: 13px;
+
+    .button_constr_icon {
+      transform: rotate(90deg);
+    }
+  }
+}

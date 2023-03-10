@@ -1,0 +1,15 @@
+.equals_container {
+  width: 232px;
+  height: 64px !important;
+
+  background: #5d5fef !important;
+  color: #ffffff;
+}
+
+.activeButtons {
+  cursor: pointer;
+
+  &:hover {
+    border: 2px solid #5d5fef;
+  }
+}
