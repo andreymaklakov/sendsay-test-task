@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/sendsay-test-task/static/css/main.b57987e5.css",
+    "main.js": "/sendsay-test-task/static/js/main.d9d92689.js",
+    "static/media/add.svg": "/sendsay-test-task/static/media/add.ff2a0d409c14819260b08f919e659b64.svg",
+    "index.html": "/sendsay-test-task/index.html",
+    "main.b57987e5.css.map": "/sendsay-test-task/static/css/main.b57987e5.css.map",
+    "main.d9d92689.js.map": "/sendsay-test-task/static/js/main.d9d92689.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b57987e5.css",
+    "static/js/main.d9d92689.js"
+  ]
+}
