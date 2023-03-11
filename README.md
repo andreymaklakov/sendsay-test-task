@@ -3,6 +3,6 @@
 
  https://andreymaklakov.github.io/sendsay-test-task/
 
-<p>In constructor mode u can grab parts of calculator and create your own version dropping them on right board. In runtime mode u can use your calculator.</p>
+<p>In constructor mode parts of calculator can be grabbed and your own version of calc can be created dropping parts on right board. On right board part can be deleted by double click on it. Calculator can be used in runtime mode.</p>
 
 <img src='https://i.ibb.co/NybKJrj/calculator.png' alt='website' />
